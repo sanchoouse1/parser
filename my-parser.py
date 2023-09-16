@@ -18,13 +18,13 @@ def get_data_in_profile(profiles_url):
 
         # Заполнение данных:
         = {
-            surname:
-            name:
-            patronymic:
-            university_division:
-            post:
-            email:
-            phone:
+            "surname":
+            "name":
+            "patronymic":
+            "university_division":
+            "post":
+            "email":
+            "phone":
         }
 
 
