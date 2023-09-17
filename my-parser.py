@@ -1,6 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import openpyxl
+import time
+
+start_time = time.time()
 
 def create_excel():
     # Создаем новый Excel-файл и новый лист (страницу)
@@ -26,8 +29,8 @@ def find_all_department_url(element, links):
         links.append('https://sfedu.ru' + a.get('href'))
 
 def data_parsing(soup_link, workbook, sheet, row):
-    h2_main = soup.select('.wrapper h2')
-    h2_fio = soup.find('div', class_='card').find_previous('h2')
+    h2_main = soup_link.select('.wrapper h2')
+    h2_fio = soup_link.find('div', class_='card').find_previous('h2')
     fio = h2_fio.text.split(' ')
 
     # Фамилия
@@ -162,3 +165,9 @@ for necessary_h4 in soup.find_all('h4'):
 
 
 transition_to_division(links_department, section_employees_of_department)
+
+end_time = time.time()
+execution_time_seconds = end_time - start_time
+execution_time_minutes = execution_time_seconds / 60
+
+print(f"Программа выполнена за {execution_time_minutes} минут")
