@@ -29,38 +29,65 @@ def find_all_department_url(element, links):
         links.append('https://sfedu.ru' + a.get('href'))
 
 def data_parsing(soup_link, workbook, sheet, row):
-    h2_main = soup_link.select('.wrapper h2')
-    h2_fio = soup_link.find('div', class_='card').find_previous('h2')
-    fio = h2_fio.text.split(' ')
+    h2_main = soup_link.select('.wrapper h2') if soup_link.select('.wrapper h2') else None
 
-    # Фамилия
-    surname = fio[0]
+    h2_fio = soup_link.find('div', class_='card') if soup_link.find('div', class_='card') else None
+    if h2_fio:
+        h2_fio = h2_fio.find_previous('h2') if h2_fio.find_previous('h2') else None
+
+        if h2_fio:
+            fio = h2_fio.text.split(' ')
+
+            # Фамилия
+            surname = fio[0]
+
+            # Имя
+            name = fio[1]
 
 
-    # Имя
-    name = fio[1]
-
-    # Отчество
-    if len(fio) >= 3:
-        patronymic = fio[2]
+            # Отчество
+            if len(fio) >= 3:
+                patronymic = fio[2]
+            else:
+                patronymic = "-"
+        else:
+            surname = '-'
+            name = '-'
+            patronymic = '-'
     else:
-        patronymic = "Отчество отсутствует"
+        surname = '-'
+        name = '-'
+        patronymic = '-'
 
 
 
-    # Подразделение
-    university_division = h2_main[0].text.strip() # Учебное подразделение / КАФЕДРА
+    if h2_main:
+        # Подразделение
+        university_division = h2_main[0].text.strip() # Учебное подразделение / КАФЕДРА
+    else:
+        university_division = "-"
 
+    post = "-"
+    cathedra_department = "-"
 
     # Должность
-    text_div = soup_link.find('div', class_='text')
-    link_a_department = text_div.find('a', href=lambda href: not href.startswith('tel:')) # КАФЕДРА / ПОДРАЗДЕЛЕНИЕ
-    paragraph = link_a_department.find_parent('p')
-    post = paragraph.text.split(' -\n')[-1].strip() # ДОЛЖНОСТЬ
+    text_div = soup_link.find('div', class_='text') if soup_link.find('div', class_='text') else None
+
+    if text_div:
+        link_a_department = text_div.find('a', href=lambda href: not href.startswith('tel:')) if text_div.find('a', href=lambda href: not href.startswith('tel:')) else None # КАФЕДРА / ПОДРАЗДЕЛЕНИЕ
+
+        if link_a_department:
+            paragraph = link_a_department.find_parent('p') if link_a_department.find_parent('p') else None
+
+            if paragraph:
+                post = paragraph.text.split(' -\n')[-1].strip() if paragraph.text.split(' -\n')[-1].strip() else "-" # ДОЛЖНОСТЬ
+                # Кафедра / подразделение
+                cathedra_department = link_a_department.get_text(strip=True) if link_a_department.get_text(strip=True) else "-"
+
 
 
     # Номера телефонов одного сотрудника (МАССИВ)
-    phones = soup_link.select('.phones a[href^="tel:"]')
+    phones = soup_link.select('.phones a[href^="tel:"]') if soup_link.select('.phones a[href^="tel:"]') else None
     if phones:
         phone = []
         for phone_number in phones:
@@ -70,11 +97,7 @@ def data_parsing(soup_link, workbook, sheet, row):
 
 
     # EMAIL
-    email = soup_link.select_one('dd a').text.split('/')[-1] + '@sfedu.ru'
-
-
-    # Кафедра / подразделение
-    cathedra_department = link_a_department.get_text(strip=True)
+    email = soup_link.select_one('dd a').text.split('/')[-1] + '@sfedu.ru' if soup_link.select_one('dd a') else "-"
 
     data = [
         (surname, name, patronymic, university_division, post, ", ".join(phone), email, cathedra_department)
@@ -109,6 +132,8 @@ def get_data_in_profile(profiles_url):
         # Парсинг данных:
         data_parsing(soup_link, workbook, sheet, row)
         row += 1
+        # Подождать 2 секунды перед следующим запросом
+        time.sleep(2)
 
 
 
