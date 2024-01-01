@@ -35,44 +35,42 @@ def create_excel():
     sheet['B1'] = "Округ"
     sheet['C1'] = "Город"
     sheet['D1'] = "Ведомственная принадлежность"
-    sheet['E1'] = "Профиль организации"
-    sheet['F1'] = "Математические и естественные науки"
-    sheet['G1'] = "Инженерное дело, технологии и технические науки"
-    sheet['H1'] = "Здравоохранение и медицинские науки"
-    sheet['I1'] = "Сельское хозяйство и сельскохозяйственные науки"
-    sheet['J1'] = "Науки об обществе"
-    sheet['K1'] = "Образование и педагогические науки"
-    sheet['L1'] = "Гуманитарные науки"
-    sheet['M1'] = "Искусство и культура"
-    sheet['N1'] = "Оборона и безопасность государства, военные науки"
-    sheet['O1'] = "Наименование образовательной организации"
-    sheet['P1'] = "E.1. Образовательная деятельность"
-    sheet['Q1'] = "РФ 2023 Медиана"
-    sheet['R1'] = "Субъект Медиана"
-    sheet['S1'] = "E.2. Научно-исследовательская деятельность"
-    sheet['T1'] = "РФ 2023 Медиана"
-    sheet['U1'] = "Субъект Медиана"
-    sheet['V1'] = "E.3. Международная деятельность"
-    sheet['W1'] = "РФ 2023 Медиана"
-    sheet['X1'] = "Субъект Медиана"
-    sheet['Y1'] = "E.4. Финансово-экономическая деятельность"
-    sheet['Z1'] = "РФ 2023 Медиана"
-    sheet['AA1'] = "Субъект Медиана"
-    sheet['AB1'] = "E.5. Заработная плата ППС"
-    sheet['AC1'] = "РФ 2023 Медиана"
-    sheet['AD1'] = "Субъект Медиана"
-    sheet['AE1'] = "E.8. Дополнительный показатель"
-    sheet['AF1'] = "РФ 2023 Медиана"
-    sheet['AG1'] = "Субъект Медиана"
+    sheet['E1'] = "web-сайт"
+    sheet['F1'] = "Профиль организации"
+    sheet['G1'] = "Математические и естественные науки"
+    sheet['H1'] = "Инженерное дело, технологии и технические науки"
+    sheet['I1'] = "Здравоохранение и медицинские науки"
+    sheet['J1'] = "Сельское хозяйство и сельскохозяйственные науки"
+    sheet['K1'] = "Науки об обществе"
+    sheet['L1'] = "Образование и педагогические науки"
+    sheet['M1'] = "Гуманитарные науки"
+    sheet['N1'] = "Искусство и культура"
+    sheet['O1'] = "Оборона и безопасность государства, военные науки"
+    sheet['P1'] = "Наименование образовательной организации"
+    sheet['Q1'] = "E.1. Образовательная деятельность"
+    sheet['R1'] = "РФ 2023 Медиана"
+    sheet['S1'] = "Субъект Медиана"
+    sheet['T1'] = "E.2. Научно-исследовательская деятельность"
+    sheet['U1'] = "РФ 2023 Медиана"
+    sheet['V1'] = "Субъект Медиана"
+    sheet['W1'] = "E.3. Международная деятельность"
+    sheet['X1'] = "РФ 2023 Медиана"
+    sheet['Y1'] = "Субъект Медиана"
+    sheet['Z1'] = "E.4. Финансово-экономическая деятельность"
+    sheet['AA1'] = "РФ 2023 Медиана"
+    sheet['AB1'] = "Субъект Медиана"
+    sheet['AC1'] = "E.5. Заработная плата ППС"
+    sheet['AD1'] = "РФ 2023 Медиана"
+    sheet['AE1'] = "Субъект Медиана"
+    sheet['AF1'] = "E.8. Дополнительный показатель"
+    sheet['AG1'] = "РФ 2023 Медиана"
+    sheet['AH1'] = "Субъект Медиана"
 
     return workbook, sheet
 
 
 
 def get_common_data(regions_list):
-    workbook, sheet = create_excel()
-    row = 2  # Начинаем со второй строки (после заголовков)
-
     parse_tr_to_td = []
 
     for region_url in regions_list:
@@ -85,28 +83,114 @@ def get_common_data(regions_list):
         for tr in tr_elements: # получаю ячейки каждой из организаций региона на данной итерации
             parse_tr_to_td.append(tr.select('td'))
 
+        # time.sleep(1)
+
     return parse_tr_to_td # Список списков
 
 
 
-def write_educ_common_data():
-    # ...
+# def get_information_second_tab_list(url):
+#     response = requests.get(url)
+#     src = response.text
+#     soup = BeautifulSoup(src, 'lxml')
+
 
 
 
 def write_characteristics_higher_educ_sys(parse_tr_to_td): #[[данные организации с первой вкладки], [данные организации с первой вкладки], [данные организации с первой вкладки], []],[]
+    workbook, sheet = create_excel()
+    row = 2  # Начинаем со второй строки (после заголовков)
+
     for educ_org in parse_tr_to_td:
-        for data in educ_org:
-            # print('https://monitoring.miccedu.ru/iam/2023/_vpo/' + parse_tr_to_td[i][1].select_one('a').get('href'))
-            # print(parse_tr_to_td[i][2].text) # математические и естественные науки
-            # print(parse_tr_to_td[i][3].text) # инженерное дело, тех...
-            # print(parse_tr_to_td[i][4].text) # здравоохранение
-            # print(parse_tr_to_td[i][5].text) # сельское хозяйство
-            # print(parse_tr_to_td[i][6].text) # науки об обществе
-            # print(parse_tr_to_td[i][7].text) # образование и педагогические науки
-            # print(parse_tr_to_td[i][8].text) # гуманитарные науки
-            # print(parse_tr_to_td[i][9].text) # искусство и культура
-            # print(parse_tr_to_td[i][10].text) # оборона и безопасность
+        # for data in educ_org:
+
+        url = 'https://monitoring.miccedu.ru/iam/2023/_vpo/' + educ_org[1].select_one('a').get('href')
+        response = requests.get(url)
+        src = response.text
+        soup = BeautifulSoup(src, 'lxml')
+
+        general_information_elements = soup.find_all('td', class_='tt')
+        general_information_list = []
+
+        for elem in general_information_elements:
+            general_information_list.append(elem.find_next_sibling('td').text.strip())
+
+        # town = re.search(r'(?:г\.|город\s)([^,]+)', general_information_list[1]).group(1) if re.search(r'(?:г\.|город\s)([^,]+)', general_information_list[1]) else general_information_list[1]
+        town = general_information_list[1]
+
+        indicators_strokes_list = soup.select('#result > tr') if soup.select('#result > tr') else "-"
+        cells_strokes = []
+        if indicators_strokes_list != "-":
+            for stroke in indicators_strokes_list:
+                cells_strokes.append(stroke.find_all('td'))
+
+        district = soup.find('div', string=lambda text: text and 'округ' in text.lower()).text.strip() if soup.find('div', string=lambda text: text and 'округ' in text.lower()) else "-"
+        #print(district)
+
+        # for cells in cells_strokes:
+        #     print('E - ' + cells[5].text)
+        #     print('РФ - ' + cells[6].text)
+        #     print('Субъект - ' + cells[7].text)
+
+        sheet[f'A{row}'] = general_information_list[0]
+        sheet[f'B{row}'] = district
+        sheet[f'C{row}'] = town
+        sheet[f'D{row}'] = general_information_list[2]
+        sheet[f'E{row}'] = general_information_list[3]
+        sheet[f'F{row}'] = general_information_list[5]
+        sheet[f'G{row}'] = educ_org[2].text
+        sheet[f'H{row}'] = educ_org[3].text
+        sheet[f'I{row}'] = educ_org[4].text
+        sheet[f'J{row}'] = educ_org[5].text
+        sheet[f'K{row}'] = educ_org[6].text
+        sheet[f'L{row}'] = educ_org[7].text
+        sheet[f'M{row}'] = educ_org[8].text
+        sheet[f'N{row}'] = educ_org[9].text
+        sheet[f'O{row}'] = educ_org[10].text
+        sheet[f'P{row}'] = general_information_list[0]
+
+        if indicators_strokes_list == "-":
+            row += 1
+            # Сохраняем Excel-файл
+            workbook.save("Monitoring.xlsx")
+            continue
+
+        sheet[f'Q{row}'] = re.search(r'([^|]+)\|', cells_strokes[0][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[0][5].text) else cells_strokes[0][5].text
+        sheet[f'R{row}'] = cells_strokes[0][6].text
+        sheet[f'S{row}'] = cells_strokes[0][7].text
+        sheet[f'T{row}'] = re.search(r'([^|]+)\|', cells_strokes[1][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[1][5].text) else cells_strokes[1][5].text
+        sheet[f'U{row}'] = cells_strokes[1][6].text
+        sheet[f'V{row}'] = cells_strokes[1][7].text
+        sheet[f'W{row}'] = re.search(r'([^|]+)\|', cells_strokes[2][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[2][5].text) else cells_strokes[2][5].text
+        sheet[f'X{row}'] = cells_strokes[2][6].text
+        sheet[f'Y{row}'] = cells_strokes[2][7].text
+        sheet[f'Z{row}'] = re.search(r'([^|]+)\|', cells_strokes[3][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[3][5].text) else cells_strokes[3][5].text
+        sheet[f'AA{row}'] = cells_strokes[3][6].text
+        sheet[f'AB{row}'] = cells_strokes[3][7].text
+        sheet[f'AC{row}'] = re.search(r'([^|]+)\|', cells_strokes[4][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[4][5].text) else cells_strokes[4][5].text
+        sheet[f'AD{row}'] = cells_strokes[4][6].text
+        sheet[f'AE{row}'] = cells_strokes[4][7].text
+        sheet[f'AF{row}'] = re.search(r'([^|]+)\|', cells_strokes[5][5].text).group(1) if re.search(r'([^|]+)\|', cells_strokes[5][5].text) else cells_strokes[5][5].text
+        sheet[f'AG{row}'] = cells_strokes[5][6].text
+        sheet[f'AH{row}'] = cells_strokes[5][7].text
+
+        row += 1
+
+        # Сохраняем Excel-файл
+        workbook.save("Monitoring.xlsx")
+
+        time.sleep(1)
+
+        # print('https://monitoring.miccedu.ru/iam/2023/_vpo/' + parse_tr_to_td[i][1].select_one('a').get('href'))
+        # print(parse_tr_to_td[i][2].text) # математические и естественные науки
+        # print(parse_tr_to_td[i][3].text) # инженерное дело, тех...
+        # print(parse_tr_to_td[i][4].text) # здравоохранение
+        # print(parse_tr_to_td[i][5].text) # сельское хозяйство
+        # print(parse_tr_to_td[i][6].text) # науки об обществе
+        # print(parse_tr_to_td[i][7].text) # образование и педагогические науки
+        # print(parse_tr_to_td[i][8].text) # гуманитарные науки
+        # print(parse_tr_to_td[i][9].text) # искусство и культура
+        # print(parse_tr_to_td[i][10].text) # оборона и безопасность
 
 
 
