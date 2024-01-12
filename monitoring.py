@@ -115,6 +115,27 @@ def get_common_data(regions_list):
 #     src = response.text
 #     soup = BeautifulSoup(src, 'lxml')
 
+def role_of_organization_V(soup, sheet, row):
+    table_rows = soup.select('#analis_reg > tr')
+    parse_rows = [row.select('td') for row in table_rows]
+
+    start_col = 56  # Индекс столбца, с которого начинаем заполнять таблицу
+    end_col = start_col + 60  # Индекс столбца, до которого заполняем таблицу
+
+    for col_num in range(start_col, end_col):
+        col_letter = openpyxl.utils.get_column_letter(col_num)
+        for parse_row in parse_rows:
+            try:
+                direction_num = int(parse_row[0].text.split('.')[0])
+            except ValueError:
+                continue  # Пропускаем строки, которые не содержат числовое направление
+
+            if direction_num == (col_num - start_col + 1):
+                header_value = parse_row[0].text.strip()
+                data_value = float(parse_row[1].text.replace(',', '.').replace(' ', ''))
+                sheet[f"{col_letter}1"] = header_value
+                sheet[f"{col_letter}{row}"] = data_value
+
 
 
 
@@ -246,6 +267,8 @@ def write_characteristics_higher_educ_sys(parse_tr_to_td): #[[данные ор�
         sheet[f'BA{row}'] = value_mapping['6.1']
         sheet[f'BB{row}'] = value_mapping['6.2']
         sheet[f'BC{row}'] = value_mapping['6.4']
+
+        role_of_organization_V(soup, sheet, row)
 
         row += 1
 
